@@ -1,0 +1,90 @@
+#!/bin/bash
+sep=" "
+col=1
+inpt=""
+outpt="result.txt"
+srt=0
+v=0.1.0-beta
+isV=0
+#Tool Name
+#!/bin/bash
+# Display fancy name
+print_fancy_name() {
+    echo
+    echo -e "\033[1;33m  ▗▄▄▄▖▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖▗▄▖ ▗▖ ▗▖▗▄▄▄▖\033[0m"
+    echo -e "\033[1;33m    █  ▐▌    ▝▚▞▘   █ ▐▌ ▐▌▐▌ ▐▌  █  \033[0m"
+    echo -e "\033[1;33m    █  ▐▛▀▀▘  ▐▌    █ ▐▌ ▐▌▐▌ ▐▌  █  \033[0m"
+    echo -e "\033[1;33m    █  ▐▙▄▄▖▗▞▘▝▚▖  █ ▝▚▄▞▘▝▚▄▞▘  █  \033[0m"
+    echo -e "\033[1;33m                      v0.1.0  By Beta\033[0m"
+    echo -e "\033[1;33m:::::::::::::::::::::::::::::::::::::\033[0m"
+    echo
+}
+
+print_fancy_name
+
+#Help Menu
+Help(){
+
+   # Display Help
+   echo -e "Welcome to TextOut Tool \nMade w/ <3 by BETA aka: beta0x01."
+   echo "This script is based on awk tool to make it easier to"
+   echo "set the awk args quickly and go faster."
+   echo
+   echo "Usage: ./textout -h"
+   echo "or u can locate this script in /usr/bin for future just type textout"
+   echo "Syntax: textout [-f|o|s|c]"
+   echo "Example: textout -f HTTP-URLs_file -s \"://\" -c 2 -o domains_file"
+   echo
+   echo "Options:"
+   echo "-h, --help          Print this Help."
+   echo "-s, --seperator     Seperator to split."
+   echo "-c, --column        Wanted Column number (default=1)."
+   echo "-f, --file          Input file (Required)."
+   echo "-o, --output        Output file (default=result.txt)."
+   echo "-r, --sort          Sort result uniquely."
+   echo "-v, --version       Print The current version of the script."
+   echo
+}
+
+# Check if no arguments are provided
+if [ $# -eq 0 ]; then
+    Help
+    exit 1
+fi
+
+# Process the options
+# Manual parsing of multi-character arguments
+while [[ "$1" != "" ]]; do
+    case $1 in
+        -h|--help )           Help; exit;;
+        -s|--seperator )            shift; sep=$1;;
+        -c|--column )            shift; col=$1;;
+        -f|--file )           shift; inpt=$1;;
+        -o|--output )            shift; outpt=$1;;
+        -r|--sort )           srt=1;;
+        -v|--version )        isV=1;;
+        * )                echo "Invalid option: $1"; Help; exit 1;;
+    esac
+    shift
+done
+
+if [ $isV -eq 1 ]; then
+    echo "this script still in beta, just use it..."
+    echo "Version: $v"
+    exit 1
+else
+    cat "$inpt" | awk -v clm="$col" -F$sep '{print $clm}' >tmp_output
+
+    if [ -z "$inpt" ]; then
+        echo "Error: Input file (-f) is required."
+        Help
+        exit 1
+    fi
+    if [ $srt -eq 1 ]; then
+        cat tmp_output | sort -u | tee "$outpt"
+    else
+        cat tmp_output | tee "$outpt"
+    fi
+fi
+
+rm tmp_output;exit 1
