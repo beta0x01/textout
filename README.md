@@ -16,7 +16,7 @@
 To use TextOut, 1st ensure you have `awk` installed on your Linux system. then u can clone the repository using the following command:
 
 ```bash
-git clone https://github.com/yourusername/TextOut.git
+git clone https://github.com/beta0x01/TextOut.git
 cd TextOut
 ```
 
